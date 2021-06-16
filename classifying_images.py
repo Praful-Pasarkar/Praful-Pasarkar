@@ -8,12 +8,14 @@
 # what happens when the <train object name> is not given?
 
 import csv
+import accuracy_checker
 
 class classifying_images:
 
     #imput is: image type and image
     def input_check(img_type,img):
         print(img_type)
+        accuracy_checker.accuracy(img, img_type)
         return img_type
 
     #imput is: csv file
@@ -21,11 +23,14 @@ class classifying_images:
         with open(img_csv, newline='') as f:
             reader = csv.reader(f)
             image_type = next(reader)  # gets the first line
+
+        accuracy_checker.accuracy('image', image_type)  #where will the image be in the csv file?
         return image_type
 
     # imput is: csv file and image type
     def input_csv_2(img_type, img_csv):
         print(img_type)
+        accuracy_checker.accuracy(img_type)
         return img_type
 
 
