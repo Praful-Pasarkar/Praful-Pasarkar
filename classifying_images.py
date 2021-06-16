@@ -7,18 +7,25 @@
 # 5. python3 train_test <train object name> abc.csv
 # what happens when the <train object name> is not given?
 
-class basic :
+import csv
+
+class classifying_images:
+
+    #imput is: image type and image
     def input_check(img_type,img):
         print(img_type)
         return img_type
 
+    #imput is: csv file
+    def input_csv(img_csv):
+        with open(img_csv, newline='') as f:
+            reader = csv.reader(f)
+            image_type = next(reader)  # gets the first line
+        return image_type
+
+    # imput is: csv file and image type
     def input_csv_2(img_type, img_csv):
         print(img_type)
         return img_type
 
-    def input_csv(img_csv):
-        print("Image CSV folder")
-        return "Image CSV folder"
 
-    def check(a):
-        return a
