@@ -24,7 +24,7 @@ class classifying_images:
             reader = csv.reader(f)
             image_type = next(reader)  # gets the first line
 
-        accuracy_checker.accuracy('image', image_type)  #where will the image be in the csv file?
+        accuracy_checker.accuracy('image', image_type)  #is each line a new image in the csv file?
         return image_type
 
     # imput is: csv file and image type
