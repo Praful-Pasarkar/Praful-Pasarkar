@@ -2,6 +2,5 @@
 
 class model:
 
-    def identify_image(image):
-        output = ""
-        return output
+    def identify_image(list_of_images):
+        pass
