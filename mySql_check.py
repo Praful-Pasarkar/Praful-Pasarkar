@@ -3,7 +3,7 @@ from mysql.connector.constants import ClientFlag
 config = {
     'user': 'root',
     'password': 'A1_34_intern',
-    'host': '193.123.69.60',
+    'host': '193.123.68.57',
     'client_flags': [ClientFlag.SSL],
     'ssl_ca': 'C:\project_Downloads\ca.pem',
     'ssl_cert': 'C:\project_Downloads\client-cert.pem',
