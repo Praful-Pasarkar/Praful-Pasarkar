@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# Put this in a class
 # This function adds two numbers
 def add(x, y):
     return x + y
