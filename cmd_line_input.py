@@ -67,4 +67,4 @@ class CmdInput:
         else:
             print("Error: invalid input")
 
-# Is the csv file one image or multiple images? Currently, it's one image.
+# Right now the csv file one image

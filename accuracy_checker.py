@@ -5,6 +5,7 @@ class accuracy_checker:
 
     def accuracy(image, actual_image_type):
         count = 0
+        # identify_image: tries to identify the image
         model_result = model.identify_image(image)
         if model_result == actual_image_type:
             count += 1
