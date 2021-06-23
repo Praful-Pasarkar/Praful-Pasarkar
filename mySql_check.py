@@ -3,12 +3,12 @@ from mysql.connector.constants import ClientFlag
 config = {
     'user': 'root',
     'password': 'A1_34_intern',
-    'host': '193.123.68.57',
+    'host': '193.123.85.72',
     'database' : 'books',
     'client_flags': [ClientFlag.SSL],
-    'ssl_ca': 'C:\project_Downloads\ca.pem',
-    'ssl_cert': 'C:\project_Downloads\client-cert.pem',
-    'ssl_key': 'C:\project_Downloads\client-key.pem',
+    'ssl_ca': 'C:\keys\ca.pem',
+    'ssl_cert': 'C:\keys\client-cert.pem',
+    'ssl_key': 'C:\keys\client-key.pem',
 }
 try:
     cnx = mysql.connector.connect(**config)
