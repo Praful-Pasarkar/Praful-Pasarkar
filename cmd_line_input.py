@@ -61,6 +61,8 @@ class AcceptInput:
         if space in user_inp:
             inp, inp1 = user_inp.split()  # splitting user input
             if self.is_valid_file(inp) or self.is_valid_file(inp1):
+
+                # How to check if the input is a single file or multiple files?
                 # 1st case: inp is a the type of image and inp1 is an image
                 if self.is_string(inp) and self.is_image(inp1):
                     accuracy_checker.accuracy(inp1, inp)
