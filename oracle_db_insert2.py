@@ -51,6 +51,6 @@ connection, cursor = oracle_db_insert2.create_connection(username)
 
 id1, name1, age1, add1, sal1 = oracle_db_insert2.receive_my_input(cursor)
 
-#oracle_db_insert2.insert_into_table(cursor,id1, name1, age1, add1, sal1)
-oracle_db_insert2.table_update(cursor,id1, name1, age1, add1, sal1)
+oracle_db_insert2.insert_into_table(cursor,id1, name1, age1, add1, sal1)
+#oracle_db_insert2.table_update(cursor,id1, name1, age1, add1, sal1)
 oracle_db_insert2.print_my_result(connection, cursor)
