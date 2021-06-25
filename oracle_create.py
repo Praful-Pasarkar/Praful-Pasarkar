@@ -6,9 +6,10 @@ class oracle_create:
         #'Do something'
         print("Class: oracle_create")
 
+    # Mihir: almltrdb_low, Manasi: devtrxmandb_low
     def create_connection(username):
         #'Code for creating connection to oracle db'
-        connection = cx_Oracle.connect(user=username, password="A1_34_intern", dsn="almltrdb_low", encoding="UTF-8")
+        connection = cx_Oracle.connect(user=username, password="A1_34_intern", dsn="devtrxmandb_low", encoding="UTF-8")
         cursor = connection.cursor()
         return connection, cursor
 
@@ -47,7 +48,7 @@ class oracle_create:
 username = input("Username\n")
 connection, cursor = oracle_create.create_connection(username)
 name, name1, age1, add1, sal1 = oracle_create.input(cursor)
-#oracle_create.create_table(cursor, name)
+oracle_create.create_table(cursor, name)
 oracle_create.insert_table(cursor, name1, age1, add1, sal1)
 oracle_create.print_my_result(connection, cursor)
 
