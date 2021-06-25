@@ -10,7 +10,7 @@ class oracle_db_insert2:
     # send password also
     def create_connection(username):
         'Code for creating connection to oracle db'
-        connection = cx_Oracle.connect(user=username, password="A1_34_intern", dsn="almltrdb_low", encoding="UTF-8")
+        connection = cx_Oracle.connect(user=username, password="A1_34_intern", dsn="devtrxmandb_low", encoding="UTF-8")
         cursor = connection.cursor()
         return connection, cursor
 

@@ -5,9 +5,7 @@ import filetype
 from numpy import genfromtxt
 from PIL import Image
 
-import accuracy_checker
-import model
-import os.path
+from AI_ML_Project import accuracy_checker
 from os import path
 
 

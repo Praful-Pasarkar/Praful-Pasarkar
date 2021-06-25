@@ -1,8 +1,6 @@
 from unittest import TestCase
 
-import pytest
-
-from classifying_images import classifying_images
+from AI_ML_Project.classifying_images import classifying_images
 
 
 class Testbasic(TestCase):

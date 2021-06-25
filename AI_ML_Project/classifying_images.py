@@ -11,7 +11,7 @@
 # File for reference: Input will be taken from cmd_line_input.py
 
 import csv
-import accuracy_checker
+from AI_ML_Project import accuracy_checker
 
 
 class classifying_images:
