@@ -7,6 +7,7 @@ from PIL import Image
 
 from AI_ML_Project import accuracy_checker
 from os import path
+import os.path
 
 
 class AcceptInput:
@@ -45,6 +46,7 @@ class AcceptInput:
         my_data = genfromtxt(file, delimiter=',')
         im = Image.fromarray(my_data)
         return im
+    # Take care of case where CSV has multiple images
 
     # Checks if the file path is valid
     def is_valid_file(filename):
@@ -53,7 +55,15 @@ class AcceptInput:
         else:
             return False
 
+    def is_valid_folder(file_path):
+        if os.path.isdir(file_path):
+            return True
+        else:
+            return False
+
+
     def cmd_input(self):
+        check_true = False
         user_inp = input("Enter\n")
         space = ' '
         if space in user_inp:
@@ -63,12 +73,29 @@ class AcceptInput:
                 # How to check if the input is a single file or multiple files?
                 # 1st case: inp is a the type of image and inp1 is an image
                 if self.is_string(inp) and self.is_image(inp1):
-                    accuracy_checker.accuracy(inp1, inp)
+                    # Call training class on image
+                    #accuracy_checker.accuracy(inp1, inp)
 
                 # 2nd case: inp is a the type of image and inp1 is a csv file
                 elif self.is_string(inp) and self.is_csv(inp1):
                     image = self.convert_csv_to_img(inp1)
-                    accuracy_checker.accuracy(image, inp)
+                    # Not needed
+                    #accuracy_checker.accuracy(image, inp)
+
+                # 3rd case: inp is type of image and inp1 is a folder of images
+                elif self.is_string(inp) and self.is_valid_folder(inp1):
+                    #Now check if folder contains images
+                    if not any(fname.endsWith('.jpg') or fname.endswith('.jpeg')
+                               for fname in os.listdir(inp1)):
+                        check_true = False
+                    else:
+                        check_true = True
+
+                    if (check_true == True):
+                        for img in os.scandir(inp1):
+                            if (img.path.endsWith('.jpg') or img.path.endsWith('.jpeg')):
+                                # Call training algorithm to train based on this image
+
 
         # if no second input is provided
         else:
