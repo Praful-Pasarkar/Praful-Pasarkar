@@ -62,7 +62,7 @@ class AcceptInput:
             return False
 
 
-    def cmd_input(self):
+    def cmd_input(self): # Supply array of images to model.py
         check_true = False
         user_inp = input("Enter\n")
         space = ' '
@@ -95,6 +95,7 @@ class AcceptInput:
                         for img in os.scandir(inp1):
                             if (img.path.endsWith('.jpg') or img.path.endsWith('.jpeg')):
                                 # Call training algorithm to train based on this image
+
 
 
         # if no second input is provided
