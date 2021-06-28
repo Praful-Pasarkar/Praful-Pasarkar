@@ -1,60 +1,59 @@
-#This class will be use machine learning to identigy the type of image
+# This class will be use machine learning to identify the type of image
 
-
-from keras.preprocessing.image import ImageDataGenerator
+import tensorflow as tf
+from tensorflow import keras
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import Activation, Dropout, Flatten, Dense
-from keras import backend as K
+from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense
+from keras.datasets import cifar10
+from tensorflow.keras import layers
+from keras.utils import to_categorical
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Model:
 
-    def execute_model(train_img_fold, img_width, img_height): # Folder path of training data
-        # Also send img / img width and height
-        # Decide EPOCH and Batch Size
-        model = Sequential()
-        model.add(Conv2D(32, (3, 3), input_shape= ))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
-        model.add(Conv2D(32, (3, 3)))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+    classification = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck ']
+    y_train_one_hot = to_categorical(y_train)
+    y_test_one_hot = to_categorical(y_test)
 
-        model.add(Conv2D(64, (3, 3)))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+    # Normalizing pixels to have a value between 0 and 1
+    x_train = x_train / 255
+    x_test = x_test / 255
 
-        model.add(Flatten())
-        model.add(Dense(64))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.5))
-        model.add(Dense(1))
-        model.add(Activation('sigmoid'))
+    # Creating the layers of model
+    model = Sequential()
 
-        model.compile(loss='binary_crossentropy',
-                      optimizer='rmsprop',
-                      metrics=['accuracy'])
+    model.add(Conv2D(32, (5, 5), activation='relu', input_shape=(32, 32, 3)))  # First layer
+    model.add(MaxPooling2D(pool_size=(2, 2)))  # Pooling layer
 
-        # this is the augmentation configuration we will use for training
-        train_datagen = ImageDataGenerator(
-            rescale=1. / 255,
-            shear_range=0.2,
-            zoom_range=0.2,
-            horizontal_flip=True)
+    model.add(Conv2D(32, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        # this is the augmentation configuration we will use for testing:
-        # only rescaling
-        test_datagen = ImageDataGenerator(rescale=1. / 255)
+    model.add(Flatten())
+    model.add(Dense(1000, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(500, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(250, activation='relu'))
+    model.add(Dense(10, activation='relu'))
 
-        train_generator = train_datagen.flow_from_directory(
-            train_img_fold,
-            target_size=(img_width, img_height),
-            batch_size=,
-            class_mode='binary')
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
 
+    # Training the model
+    histogram = model.fit(x_train, y_train_one_hot, batch_size=256, epochs=10, validation_split=0.2)
 
+    model.evaluate(x_test, y_test_one_hot)[1]
 
-
-
+    # Plotting the model's accuracy
+    plt.plot(histogram.history['accuracy'])
+    plt.plot(histogram.history['val_accuracy'])
+    plt.title('Accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Val'], loc='upper right')
+    plt.show()
