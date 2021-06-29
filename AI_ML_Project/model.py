@@ -8,7 +8,7 @@ from keras.datasets import cifar10
 from tensorflow.keras import layers
 from keras.utils import to_categorical
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 class Model:
@@ -16,10 +16,11 @@ class Model:
     (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
     classification = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck ']
-    y_train_one_hot = to_categorical(y_train)
-    y_test_one_hot = to_categorical(y_test)
+    # Makes input data to binary matrix values so that the training model can understand the data
+    y_train_categorical = to_categorical(y_train)
+    y_test_categorical = to_categorical(y_test)
 
-    # Normalizing pixels to have a value between 0 and 1
+    # To make pixel values from 0 - 1
     x_train = x_train / 255
     x_test = x_test / 255
 
@@ -45,15 +46,8 @@ class Model:
                   metrics=['accuracy'])
 
     # Training the model
-    histogram = model.fit(x_train, y_train_one_hot, batch_size=256, epochs=10, validation_split=0.2)
+    histogram = model.fit(x_train, y_train_categorical, batch_size=256, epochs=10, validation_split=0.2)
 
-    model.evaluate(x_test, y_test_one_hot)[1]
+    model.evaluate(x_test, y_test_categorical)[1]
 
-    # Plotting the model's accuracy
-    plt.plot(histogram.history['accuracy'])
-    plt.plot(histogram.history['val_accuracy'])
-    plt.title('Accuracy')
-    plt.ylabel('Accuracy')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Val'], loc='upper right')
-    plt.show()
+
