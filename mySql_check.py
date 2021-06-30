@@ -8,17 +8,22 @@ config = ConfigParser()
 config.read(file)
 name = config['user_root']['name']
 pswd = config['user_root']['password']
+host = config['Server']['ip_manasi']
+file1 = config['Keys']['ssl_ca']
+file2 = config['Keys']['ssl_cert']
+file3 = config['Keys']['ssl_key']
+
 print(name)
 print(pswd)
 config = {
     'user': name,
     'password': pswd,  # Take it as an input
-    'host': '193.123.85.72',     # Take it as an input
+    'host': host,     # Take it as an input
     'database' : 'books',
     'client_flags': [ClientFlag.SSL],
-    'ssl_ca': 'C:\keys\ca.pem',
-    'ssl_cert': 'C:\keys\client-cert.pem',
-    'ssl_key': 'C:\keys\client-key.pem',
+    'ssl_ca': file1,
+    'ssl_cert': file2,
+    'ssl_key': file3,
 }
 try:
     cnx = mysql.connector.connect(**config)
