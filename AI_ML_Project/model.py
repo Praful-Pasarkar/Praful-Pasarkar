@@ -1,5 +1,7 @@
 # This class will be use machine learning to identify the type of image
 
+# Goal: To train user inputted data based on given image type by user (for this class)
+
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Sequential
@@ -10,7 +12,7 @@ from keras.utils import to_categorical
 import numpy as np
 # import matplotlib.pyplot as plt
 
-
+# Approach: Test with online dataset first, then connect class to cmd_line class
 class Model:
 
     (x_train, y_train), (x_test, y_test) = cifar10.load_data()
@@ -49,5 +51,6 @@ class Model:
     histogram = model.fit(x_train, y_train_categorical, batch_size=256, epochs=10, validation_split=0.2)
 
     model.evaluate(x_test, y_test_categorical)[1]
+
 
 
