@@ -73,6 +73,7 @@ class AcceptInput:
                 # How to check if the input is a single file or multiple files?
                 # 1st case: inp is a the type of image and inp1 is an image
                 if self.is_string(inp) and self.is_image(inp1):
+                    print(inp)
                     # Call training class on image
                     #accuracy_checker.accuracy(inp1, inp)
 
@@ -84,17 +85,9 @@ class AcceptInput:
 
                 # 3rd case: inp is type of image and inp1 is a folder of images
                 elif self.is_string(inp) and self.is_valid_folder(inp1):
-                    #Now check if folder contains images
-                    if not any(fname.endsWith('.jpg') or fname.endswith('.jpeg')
-                               for fname in os.listdir(inp1)):
-                        check_true = False
-                    else:
-                        check_true = True
+                    print(inp)
+                    # Send inp1 to model1
 
-                    if (check_true == True):
-                        for img in os.scandir(inp1):
-                            if (img.path.endsWith('.jpg') or img.path.endsWith('.jpeg')):
-                                # Call training algorithm to train based on this image
 
 
 
@@ -103,6 +96,8 @@ class AcceptInput:
             if self.is_csv(user_inp):
                 image = self.convert_csv_to_img(user_inp)
                 accuracy_checker.accuracy(image, user_inp)
+            elif self.is_valid_folder(user_inp):
+                print(user_inp)
             else:
                 print("Error: invalid input")
 

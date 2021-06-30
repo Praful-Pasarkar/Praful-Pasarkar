@@ -1,8 +1,18 @@
 import mysql.connector
 from mysql.connector.constants import ClientFlag
+
+from configparser import ConfigParser
+
+file = 'config.ini' # The config file
+config = ConfigParser()
+config.read(file)
+name = config['user_root']['name']
+pswd = config['user_root']['password']
+print(name)
+print(pswd)
 config = {
-    'user': 'root',
-    'password': 'A1_34_intern',  # Take it as an input
+    'user': name,
+    'password': pswd,  # Take it as an input
     'host': '193.123.85.72',     # Take it as an input
     'database' : 'books',
     'client_flags': [ClientFlag.SSL],
