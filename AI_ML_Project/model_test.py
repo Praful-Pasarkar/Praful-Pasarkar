@@ -35,19 +35,15 @@ class_names = train_ds.class_names
 print(class_names)
 
 # Scaling down the pixel values
-normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1./255)
-normalized_ds = train_ds.map(lambda x, y: (normalization_layer(x), y))
-image_batch, labels_batch = next(iter(normalized_ds))
-first_image = image_batch[0]
-
+# normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1./255)
+# normalized_ds = train_ds.map(lambda x, y: (normalization_layer(x), y))
+# image_batch, labels_batch = next(iter(normalized_ds))
+# first_image = image_batch[0]
+#
 # The pixels values are now in [0,1].
-print(np.min(first_image), np.max(first_image))
+# print(np.min(first_image), np.max(first_image))
 
-#AUTOTUNE = tf.data.AUTOTUNE
-
-#train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-#val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
-
+# Types of flowers
 num_classes = 5
 
 # Doing conv2d 3 times to get a 3d shape
@@ -72,6 +68,6 @@ model.compile(
 model.fit(
   train_ds,
   validation_data=val_ds,
-  epochs=3
+  epochs=5
 )
 
