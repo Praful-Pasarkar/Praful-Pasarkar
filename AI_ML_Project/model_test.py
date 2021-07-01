@@ -5,9 +5,13 @@ import PIL.Image
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import pathlib
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import model_accept_input
 
 
 class model_test:
+  os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
   batch_size = 32
   img_height = 180
   img_width = 180
@@ -31,6 +35,7 @@ class model_test:
       batch_size=batch_size)
 
 
+
   # Different types of flowers
   # class_names = train_ds.class_names
   # print(class_names)
@@ -46,8 +51,9 @@ class model_test:
       print(np.min(first_image), np.max(first_image))
       print('Normalization function')
 
-  def create_model(train_ds):
-      num_classes = 5
+  def create_model(train_ds, self=None):
+      #num_classes = 5
+      num_classes = model_accept_input.AcceptFolder.cmd_input(self)
 
       # Doing conv2d 3 times to get a 3d shape
       model = tf.keras.Sequential([

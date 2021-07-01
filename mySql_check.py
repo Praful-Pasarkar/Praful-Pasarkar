@@ -8,7 +8,7 @@ config = ConfigParser()
 config.read(file)
 name = config['user_root']['name']
 pswd = config['user_root']['password']
-host = config['Server']['ip_mihir']
+host = config['Server']['ip_manasi']
 file1 = config['Keys']['ssl_ca']
 file2 = config['Keys']['ssl_cert']
 file3 = config['Keys']['ssl_key']
