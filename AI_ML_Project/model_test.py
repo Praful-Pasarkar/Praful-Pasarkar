@@ -54,6 +54,7 @@ class model_test:
   def create_model(train_ds, self=None):
       #num_classes = 5
       num_classes = model_accept_input.AcceptFolder.cmd_input(self)
+      print(num_classes)
 
       # Doing conv2d 3 times to get a 3d shape
       model = tf.keras.Sequential([
