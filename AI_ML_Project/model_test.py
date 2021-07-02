@@ -74,7 +74,7 @@ class model_test:
 
   def model_compile(model):
       model.compile(
-          optimizer='adam',
+          optimizer='adamax',
           loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
           metrics=['accuracy'])
 
