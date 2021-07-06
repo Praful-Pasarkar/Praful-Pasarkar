@@ -19,7 +19,7 @@ class model_test:
   # Images that will be used for training
   train_ds = tf.keras.preprocessing.image_dataset_from_directory(
       'C:\\keys\\flower_photos',
-      validation_split=0.2,
+      validation_split=0.1,
       subset="training",
       seed=123,
       image_size=(img_height, img_width),
@@ -28,7 +28,7 @@ class model_test:
   # Images that will be used for validation
   val_ds = tf.keras.preprocessing.image_dataset_from_directory(
       'C:\\keys\\flower_photos',
-      validation_split=0.2,
+      validation_split=0.5,
       subset="validation",
       seed=123,
       image_size=(img_height, img_width),
@@ -74,14 +74,14 @@ class model_test:
 
   def model_compile(model):
       model.compile(
-          optimizer='adamax',
+          optimizer='adam',
           loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
           metrics=['accuracy'])
 
       print('Compiling model')
 
   def model_fit(model, train_ds, val_ds):
-    model.fit(train_ds,validation_data=val_ds,epochs=3)
+    model.fit(train_ds,validation_data=val_ds,epochs=5)
 
     print('Executing model')
 
