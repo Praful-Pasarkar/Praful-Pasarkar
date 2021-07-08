@@ -1,5 +1,9 @@
+import PIL
 from PIL import Image
 import filetype
+import numpy as np
+from keras.preprocessing import image
+import model_test
 
 class AcceptImage:
 
@@ -13,8 +17,8 @@ class AcceptImage:
     # Sends the image to another class to identify it
     def user_input(self): # Supply array of images to model.py
         inp = input("Enter\n")
-        if self.is_image(inp):
-            # Send it to another class that will identify it
+        image = PIL.Image.open(inp)
+        width, height = image.size
 
-    # The trained model doesn't return image type.
+        print(width, height)
 

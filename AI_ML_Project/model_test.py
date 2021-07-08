@@ -6,8 +6,14 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 import pathlib
 import os
+
+from filetype import is_image
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import model_accept_input
+from PIL import Image
+import filetype
+from keras.preprocessing import image
 
 
 class model_test:
@@ -81,11 +87,48 @@ class model_test:
       print('Compiling model')
 
   def model_fit(model, train_ds, val_ds):
-    model.fit(train_ds,validation_data=val_ds,epochs=5)
+    model.fit(train_ds,validation_data=val_ds,epochs=3)
 
     print('Executing model')
+
+  def is_image(filename):
+      if filetype.is_image(filename):
+          return True
+      else:
+          return False
+
+  def classify_image(train_ds, model, dirlist):
+      inp = input("Enter\n")
+      if is_image(inp):
+
+          # Resizing the image and sending it to model
+          img = Image.open(inp)
+          img = img.resize((180, 180))
+          img = np.array(img)
+          img = img / 255.0
+          img = img.reshape(1, 180, 180, 3)
+          img_class = np.argmax(model.predict(img), axis=-1)  # Predicts the image type
+          classname = img_class[0]   # Returns the index of the folder
+          image_type = dirlist[classname - 1]  # Gets the name of the folder
+          print("Class: ", image_type)
+
+  def image_size(self):
+      inp = input("Enter\n")
+      image = PIL.Image.open(inp)
+      width, height = image.size
+      print(width, height)
+
+  # Prints the names of all the folders in a directory
+  def folder_names(self):
+      root = input("Enter\n")
+      dirlist = [item for item in os.listdir(root) if os.path.isdir(os.path.join(root, item))]
+      print(dirlist)
+      return dirlist
 
   normalization(train_ds)
   model = create_model(train_ds)
   model_compile(model)
   model_fit(model, train_ds, val_ds)
+  dirlist = folder_names(self=None)
+  classify_image(train_ds, model, dirlist)
+  #image_size(self=None)
