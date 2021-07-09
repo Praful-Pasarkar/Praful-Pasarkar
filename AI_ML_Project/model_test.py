@@ -89,6 +89,8 @@ class model_test:
   def model_fit(model, train_ds, val_ds):
     model.fit(train_ds,validation_data=val_ds,epochs=3)
 
+    model.summary()
+
     print('Executing model')
 
   def is_image(filename):
@@ -98,19 +100,22 @@ class model_test:
           return False
 
   def classify_image(train_ds, model, dirlist):
-      inp = input("Enter\n")
-      if is_image(inp):
+      inp1 = 'y'
+      while inp1 == 'y' or inp1 == 'Y':
+          inp = input("Enter\n")
+          if is_image(inp):
 
-          # Resizing the image and sending it to model
-          img = Image.open(inp)
-          img = img.resize((180, 180))
-          img = np.array(img)
-          img = img / 255.0
-          img = img.reshape(1, 180, 180, 3)
-          img_class = np.argmax(model.predict(img), axis=-1)  # Predicts the image type
-          classname = img_class[0]   # Returns the index of the folder
-          image_type = dirlist[classname - 1]  # Gets the name of the folder
-          print("Class: ", image_type)
+              # Resizing the image and sending it to model
+              img = Image.open(inp)
+              img = img.resize((180, 180))
+              img = np.array(img)
+              img = img / 255.0
+              img = img.reshape(1, 180, 180, 3)
+              img_class = model.predict_classes(img) #np.argmax(model.predict(img), axis=-1)  # Predicts the image type
+              classname = img_class[0]   # Returns the index of the folder
+              image_type = dirlist[classname - 1]  # Gets the name of the folder
+              print("Class: ", image_type)
+              inp1 = input("Do you want to confinue?\n")
 
   def image_size(self):
       inp = input("Enter\n")
