@@ -17,9 +17,9 @@ import numpy as np
 
 class new_model:
 
-    labels = ['rugby', 'soccer']
-    img_size = 224
     def get_data(data_dir):
+        labels = ['rugby', 'soccer']
+        img_size = 224
         data = []
         for label in labels:
             path = os.path.join(data_dir, label)
