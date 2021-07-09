@@ -1,4 +1,4 @@
-import seaborn as sns
+#import seaborn as sns
 
 import keras
 from keras.models import Sequential
@@ -6,7 +6,7 @@ from keras.layers import Dense, Conv2D , MaxPool2D , Flatten , Dropout
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam
 
-from sklearn.metrics import classification_report,confusion_matrix
+#from sklearn.metrics import classification_report,confusion_matrix
 
 import tensorflow as tf
 
@@ -17,9 +17,9 @@ import numpy as np
 
 class new_model:
 
-    def get_data(data_dir):
-        labels = ['rugby', 'soccer']
-        img_size = 224
+    labels = ['daisy', 'dandelion', 'roses', 'sunflower', 'tulip']
+    img_size = 224
+    def get_data(data_dir, labels, img_size):
         data = []
         for label in labels:
             path = os.path.join(data_dir, label)
@@ -33,15 +33,15 @@ class new_model:
                     print(e)
         return np.array(data)
 
-    def show_data(train):
-        l = []
-        for i in train:
-            if (i[1] == 0):
-                l.append("rugby")
-            else:
-                l.append("soccer")
-        sns.set_style('darkgrid')
-        sns.countplot(l)
+    # def show_data(train):
+    #     l = []
+    #     for i in train:
+    #         if (i[1] == 0):
+    #             l.append("rugby")
+    #         else:
+    #             l.append("soccer")
+    #     sns.set_style('darkgrid')
+    #     sns.countplot(l)
 
     def model_compile(model):
         model.compile(
@@ -60,10 +60,8 @@ class new_model:
 
         return model
 
-    train = get_data('../input/traintestsports/Main/train')
-    val = get_data('../input/traintestsports/Main/test')
-
-    img_size = 224
+    train = get_data('C:\\Keys\\flower_photos', labels, img_size)
+    val = get_data('C"\\Keys\\flower_photos_val', labels, img_size)
 
     x_train = []
     y_train = []
@@ -89,18 +87,17 @@ class new_model:
     y_val = np.array(y_val)
 
     datagen = ImageDataGenerator(
-            featurewise_center=False,  # set input mean to 0 over the dataset
-            samplewise_center=False,  # set each sample mean to 0
-            featurewise_std_normalization=False,  # divide inputs by std of the dataset
-            samplewise_std_normalization=False,  # divide each input by its std
-            zca_whitening=False,  # apply ZCA whitening
-            rotation_range = 30,  # randomly rotate images in the range (degrees, 0 to 180)
-            zoom_range = 0.2, # Randomly zoom image
-            width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
-            height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
-            horizontal_flip = True,  # randomly flip images
-            vertical_flip=False)  # randomly flip images
-
+            featurewise_center=False,
+            samplewise_center=False,
+            featurewise_std_normalization=False,
+            samplewise_std_normalization=False,
+            zca_whitening=False,
+            rotation_range = 30,
+            zoom_range = 0.2,
+            width_shift_range=0.1,
+            height_shift_range=0.1,
+            horizontal_flip = True,
+            vertical_flip=False)
 
     datagen.fit(x_train)
 
@@ -120,6 +117,9 @@ class new_model:
     model.add(Dense(2, activation="softmax"))
 
     model.summary()
+
+    model_compile(model)
+    model_fit(model, x_train, y_train, x_val, y_val)
 
 
 
