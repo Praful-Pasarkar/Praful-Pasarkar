@@ -3,7 +3,7 @@ import os
 import PIL
 import PIL.Image
 import tensorflow as tf
-import tensorflow_datasets as tfds
+#import tensorflow_datasets as tfds
 import pathlib
 import os
 
@@ -24,7 +24,7 @@ class model_test:
 
   # Images that will be used for training
   train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-      'C:\\keys\\flower_photos',
+      'C:\\Keys\\flower_photos',
       validation_split=0.1,
       subset="training",
       seed=123,
@@ -33,7 +33,7 @@ class model_test:
 
   # Images that will be used for validation
   val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-      'C:\\keys\\flower_photos',
+      'C:\\Keys\\flower_photos',
       validation_split=0.5,
       subset="validation",
       seed=123,
@@ -134,6 +134,7 @@ class model_test:
   model = create_model(train_ds)
   model_compile(model)
   model_fit(model, train_ds, val_ds)
+
   dirlist = folder_names(self=None)
   classify_image(train_ds, model, dirlist)
   #image_size(self=None)

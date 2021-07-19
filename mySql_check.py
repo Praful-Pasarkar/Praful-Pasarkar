@@ -19,7 +19,7 @@ config = {
     'user': name,
     'password': pswd,  # Take it as an input
     'host': host,     # Take it as an input
-    'database' : 'books',
+    'database' : 'books'    ,
     'client_flags': [ClientFlag.SSL],
     'ssl_ca': file1,
     'ssl_cert': file2,
