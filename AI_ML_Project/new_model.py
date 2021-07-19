@@ -17,7 +17,8 @@ import numpy as np
 
 class new_model:
 
-    labels = ['daisy', 'dandelion', 'roses', 'sunflower', 'tulip']
+    #labels = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
+    labels = ['daisy', 'dandelion']
     img_size = 224
     def get_data(data_dir, labels, img_size):
         data = []
@@ -26,12 +27,12 @@ class new_model:
             class_num = labels.index(label)
             for img in os.listdir(path):
                 try:
-                    img_arr = cv2.imread(os.path.join(path, img))[...,::-1] #convert BGR to RGB format
+                    img_arr = cv2.imread(os.path.join(path, img))#[...,::-1] #convert BGR to RGB format
                     resized_arr = cv2.resize(img_arr, (img_size, img_size)) # Reshaping images to preferred size
                     data.append([resized_arr, class_num])
                 except Exception as e:
                     print(e)
-        return np.array(data)
+        return np.array(data, dtype=object)
 
     # def show_data(train):
     #     l = []
@@ -54,14 +55,14 @@ class new_model:
         return model
 
     def model_fit(model, x_train, y_train, x_val, y_val):
-        model.fit(x_train,y_train,epochs = 500 , validation_data = (x_val, y_val))
+        model.fit(x_train,y_train,epochs = 5 , validation_data = (x_val, y_val))
 
         print('Executing model')
 
         return model
 
-    train = get_data('C:\\Keys\\flower_photos', labels, img_size)
-    val = get_data('C"\\Keys\\flower_photos_val', labels, img_size)
+    train = get_data('C:\\keys\\temp_train', labels, img_size)
+    val = get_data('C:\\keys\\temp_val', labels, img_size)
 
     x_train = []
     y_train = []
@@ -118,8 +119,8 @@ class new_model:
 
     model.summary()
 
-    model_compile(model)
-    model_fit(model, x_train, y_train, x_val, y_val)
+    model1 = model_compile(model)
+    model_fit(model1, x_train, y_train, x_val, y_val)
 
 
 
