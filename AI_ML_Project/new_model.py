@@ -1,127 +1,168 @@
-#import seaborn as sns
-
-import keras
-from keras.models import Sequential
-from keras.layers import Dense, Conv2D , MaxPool2D , Flatten , Dropout
-from keras.preprocessing.image import ImageDataGenerator
-from keras.optimizers import Adam
-
-#from sklearn.metrics import classification_report,confusion_matrix
-
-import tensorflow as tf
-
-import cv2
-import os
-
 import numpy as np
+import os
+import PIL
+import PIL.Image
+import tensorflow as tf
+# import tensorflow_datasets as tfds
+import pathlib
+import os
+import tensorflow as tf
+from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Activation, Dropout, Flatten, Dense
+#from skimage.transform import resize
 
-class new_model:
+# C:\keys\idenprof\train\chef
+# C:\\keys\\idenprof\\train
 
-    #labels = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
-    labels = ['daisy', 'dandelion']
-    img_size = 224
-    def get_data(data_dir, labels, img_size):
-        data = []
-        for label in labels:
-            path = os.path.join(data_dir, label)
-            class_num = labels.index(label)
-            for img in os.listdir(path):
-                try:
-                    img_arr = cv2.imread(os.path.join(path, img))#[...,::-1] #convert BGR to RGB format
-                    resized_arr = cv2.resize(img_arr, (img_size, img_size)) # Reshaping images to preferred size
-                    data.append([resized_arr, class_num])
-                except Exception as e:
-                    print(e)
-        return np.array(data, dtype=object)
+from filetype import is_image
 
-    # def show_data(train):
-    #     l = []
-    #     for i in train:
-    #         if (i[1] == 0):
-    #             l.append("rugby")
-    #         else:
-    #             l.append("soccer")
-    #     sns.set_style('darkgrid')
-    #     sns.countplot(l)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+#import model_accept_input
+from PIL import Image
+import filetype
+from keras.preprocessing import image
 
-    def model_compile(model):
-        model.compile(
-            optimizer='adam',
-            loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy'])
 
-        print('Compiling model')
+class model_test:
+  os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
+  batch_size = 32
+  img_height = 180
+  img_width = 180
 
-        return model
 
-    def model_fit(model, x_train, y_train, x_val, y_val):
-        model.fit(x_train,y_train,epochs = 5 , validation_data = (x_val, y_val))
+  # Images that will be used for training
+  train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+      'C:\\Keys\\idenprof\\train',
+      validation_split=0.2,
+      subset="training",
+      shuffle=True,
+      seed=123,
+      image_size=(img_height, img_width),
+      batch_size=batch_size)
 
-        print('Executing model')
+  # Images that will be used for validation
+  val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+      'C:\\Keys\\idenprof\\test',
+      validation_split=0.2,
+      subset="validation",
+      shuffle=True,
+      seed=123,
+      image_size=(img_height, img_width),
+      batch_size=batch_size)
 
-        return model
 
-    train = get_data('C:\\keys\\temp_train', labels, img_size)
-    val = get_data('C:\\keys\\temp_val', labels, img_size)
 
-    x_train = []
-    y_train = []
-    x_val = []
-    y_val = []
+  # Different types of flowers
+  # class_names = train_ds.class_names
+  # print(class_names)
 
-    for feature, label in train:
-      x_train.append(feature)
-      y_train.append(label)
+  # Scaling down the pixel values
+  def normalization(train_ds):
+      normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1. / 255)
+      normalized_ds = train_ds.map(lambda x, y: (normalization_layer(x), y))
+      image_batch, labels_batch = next(iter(normalized_ds))
+      first_image = image_batch[0]
 
-    for feature, label in val:
-      x_val.append(feature)
-      y_val.append(label)
+      # The pixels values are now in [0,1].
+      print(np.min(first_image), np.max(first_image))
+      print('Normalization function')
 
-    # Normalize the data
-    x_train = np.array(x_train) / 255
-    x_val = np.array(x_val) / 255
+  def create_model(train_ds, self=None):
+      num_classes = 10
+      #num_classes = model_accept_input.AcceptFolder.cmd_input(self)
+      #print(num_classes)
 
-    x_train.reshape(-1, img_size, img_size, 1)
-    y_train = np.array(y_train)
+      # Doing conv2d 3 times to get a 3d shape
+      # tf.keras.layers.Conv2D(32, 3, activation='relu'),
+      # tf.keras.layers.MaxPooling2D(),
+      # # tf.keras.layers.Flatten(),
+      model = tf.keras.Sequential([
+          tf.keras.layers.experimental.preprocessing.Rescaling(1. / 255),
+          tf.keras.layers.Conv2D(32, 3, activation='relu', input_shape=(180,180,3)),
+          tf.keras.layers.MaxPooling2D(),
+          tf.keras.layers.Conv2D(32, 3, activation='relu'),
+          tf.keras.layers.MaxPooling2D(),
+          tf.keras.layers.Conv2D(32, 3, activation='relu'),
+          tf.keras.layers.MaxPooling2D(),
+          tf.keras.layers.Flatten(),
+          tf.keras.layers.Dense(128, activation='relu'),
+          tf.keras.layers.Dense(num_classes)
+      ])
+      #model.summary()
+      print('Creating model')
+      return model
 
-    x_val.reshape(-1, img_size, img_size, 1)
-    y_val = np.array(y_val)
+  def model_compile(model):
+      model.compile(
+          optimizer='adam',   #rmsprop
+          loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
+          metrics=['accuracy'])
 
-    datagen = ImageDataGenerator(
-            featurewise_center=False,
-            samplewise_center=False,
-            featurewise_std_normalization=False,
-            samplewise_std_normalization=False,
-            zca_whitening=False,
-            rotation_range = 30,
-            zoom_range = 0.2,
-            width_shift_range=0.1,
-            height_shift_range=0.1,
-            horizontal_flip = True,
-            vertical_flip=False)
+      print('Compiling model')
+      return model
 
-    datagen.fit(x_train)
-
-    model = Sequential()
-    model.add(Conv2D(32, 3, padding="same", activation="relu", input_shape=(224, 224, 3)))
-    model.add(MaxPool2D())
-
-    model.add(Conv2D(32, 3, padding="same", activation="relu"))
-    model.add(MaxPool2D())
-
-    model.add(Conv2D(64, 3, padding="same", activation="relu"))
-    model.add(MaxPool2D())
-    model.add(Dropout(0.4))
-
-    model.add(Flatten())
-    model.add(Dense(128, activation="relu"))
-    model.add(Dense(2, activation="softmax"))
+  def model_fit(model, train_ds, val_ds):
+    model.fit(train_ds,validation_data=val_ds,epochs=1)
 
     model.summary()
 
-    model1 = model_compile(model)
-    model_fit(model1, x_train, y_train, x_val, y_val)
+    print('Executing model')
 
+  def is_image(filename):
+      if filetype.is_image(filename):
+          return True
+      else:
+          return False
 
+  def classify_image(train_ds, model, dirlist):
+      inp1 = 'y'
+      while inp1 == 'y' or inp1 == 'Y':
+          inp = input("Enter img path\n")
+          if is_image(inp):
+              # img = Image.open(inp)
+              # img = img.resize((180, 180))
+              # #img = resize(img, (180,180,3))
+              # predictions = model.predict(np.array(img))
+              img_path = inp
+              img = image.load_img(img_path, target_size=(180, 180))
+              img_array = image.img_to_array(img)
+              img_batch = np.expand_dims(img_array, axis=0)
+              img_preprocessed = preprocess_input(img_batch)
+              predictions = model.predict(np.array(img_preprocessed))
+              list_index = [0,1,2,3,4,5,6,7,8,9]
+              x = predictions
+              print(x,'\n')
+              # for i in range(10):
+              #     for j in range(10):
+              #         if x[i] > x[j]:
+              #             temp = list_index[i]
+              #             list_index[i] = list_index[j]
+              #             list_index[j] = temp
+              #
+              # for i in range(5):
+              #     print(dirlist[list_index[i]], ':', predictions[0][list_index[i]] * 100, '%')
+              inp1 = input("Do you want to confinue?\n")
 
+  def image_size(self):
+      inp = input("Enter\n")
+      image = PIL.Image.open(inp)
+      width, height = image.size
+      print(width, height)
 
+  # Prints the names of all the folders in a directory
+  def folder_names(self):
+      root = input("Enter folder path\n")
+      dirlist = [item for item in os.listdir(root) if os.path.isdir(os.path.join(root, item))]
+      print(dirlist)
+      return dirlist
+
+  #normalization(train_ds)
+  model = create_model(train_ds)
+  model1 = model_compile(model)
+  model_fit(model1, train_ds, val_ds)
+  dirlist = folder_names(self=None)
+  classify_image(train_ds, model, dirlist)
+  #image_size(self=None)

@@ -3,7 +3,7 @@ import os
 import PIL
 import PIL.Image
 import tensorflow as tf
-import tensorflow_datasets as tfds
+# import tensorflow_datasets as tfds
 import pathlib
 import os
 import tensorflow as tf
@@ -19,7 +19,7 @@ from keras.layers import Activation, Dropout, Flatten, Dense
 from filetype import is_image
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-import model_accept_input
+#import model_accept_input
 from PIL import Image
 import filetype
 from keras.preprocessing import image
@@ -34,7 +34,7 @@ class model_test:
 
   # Images that will be used for training
   train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-      'C:\\keys\\idenprof\\train',
+      'C:\\Keys\\idenprof\\train',
       validation_split=0.2,
       subset="training",
       shuffle=True,
@@ -44,7 +44,7 @@ class model_test:
 
   # Images that will be used for validation
   val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-      'C:\\keys\\idenprof\\test',
+      'C:\\Keys\\idenprof\\test',
       validation_split=0.2,
       subset="validation",
       shuffle=True,
@@ -70,9 +70,9 @@ class model_test:
       print('Normalization function')
 
   def create_model(train_ds, self=None):
-      #num_classes = 5
-      num_classes = model_accept_input.AcceptFolder.cmd_input(self)
-      print(num_classes)
+      num_classes = 10
+      #num_classes = model_accept_input.AcceptFolder.cmd_input(self)
+      #print(num_classes)
 
       # Doing conv2d 3 times to get a 3d shape
       # tf.keras.layers.Conv2D(32, 3, activation='relu'),
@@ -104,7 +104,7 @@ class model_test:
       return model
 
   def model_fit(model, train_ds, val_ds):
-    model.fit(train_ds,validation_data=val_ds,epochs=10)
+    model.fit(train_ds,validation_data=val_ds,epochs=5)
 
     model.summary()
 
