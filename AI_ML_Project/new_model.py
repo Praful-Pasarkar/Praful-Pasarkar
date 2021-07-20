@@ -35,8 +35,8 @@ class model_test:
 
   # Images that will be used for training
   train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-      'C:\\Keys\\idenprof\\train',
-      validation_split=0.2,
+      'C:\\Keys\\idenprof\\test',
+      validation_split=0.001,
       subset="training",
       shuffle=True,
       seed=123,
@@ -45,8 +45,8 @@ class model_test:
 
   # Images that will be used for validation
   val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-      'C:\\Keys\\idenprof\\test',
-      validation_split=0.2,
+      'C:\\Keys\\idenprof\\train',
+      validation_split=0.999,
       subset="validation",
       shuffle=True,
       seed=123,
@@ -97,7 +97,7 @@ class model_test:
 
   def model_compile(model):
       model.compile(
-          optimizer='adam',   #rmsprop
+          optimizer='rmsprop',   #rmsprop
           loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
           metrics=['accuracy'])
 
@@ -105,7 +105,7 @@ class model_test:
       return model
 
   def model_fit(model, train_ds, val_ds):
-    model.fit(train_ds,validation_data=val_ds,epochs=1)
+    model.fit(train_ds,validation_data=val_ds,epochs=5)
 
     model.summary()
 
