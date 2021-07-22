@@ -1,3 +1,5 @@
+import os
+import tensorflow as tf
 from keras.datasets import cifar10
 from keras.models import Sequential
 from keras.layers import Dense
@@ -10,9 +12,41 @@ from keras.layers.convolutional import MaxPooling2D
 from keras.utils import np_utils
 from PIL import Image
 import numpy as np
+from sklearn.model_selection import train_test_split
+import cv2
 
-class cifar_test:
-    (train_X, train_Y), (test_X, test_Y) = cifar10.load_data()
+class cifarpng:
+    DATA_DIR = "C:\\Keys\\cifar10\\train"
+    #DATA_DIR = "C:\\Keys\\idenprof\\train"
+    CATERGORIES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    #CATERGORIES = ['chef', 'doctor', 'engineer', 'farmer', 'firefighter', 'judge', 'mechanic', 'pilot', 'police', 'waiter']
+    IMAGE_SIZE = 32
+    training_data = []
+    for categories in CATERGORIES:
+        path = os.path.join(DATA_DIR, categories)
+        class_num = CATERGORIES.index(categories)
+        for img in os.listdir(path):
+            try:
+                img_array = cv2.imread(os.path.join(path, img))
+                new_array = cv2.resize(img_array, (IMAGE_SIZE, IMAGE_SIZE))
+                training_data.append([new_array, class_num])
+            except:
+                pass
+    data = np.asarray(training_data)
+    x_data = []
+    y_data = []
+
+    for x in data:
+        x_data.append(x[0])
+        y_data.append(x[1])
+    x_data_np = np.asarray(x_data)
+    y_data_np = np.asarray(y_data)
+
+    x_data_np = x_data_np.reshape(-1, 32, 32, 1)
+    print(x_data_np.shape)
+    print(y_data_np.shape)
+
+    (train_X, train_Y), (test_X, test_Y) = train_test_split(x_data_np, y_data_np, test_size=0.3, random_state=101)
     train_x = train_X.astype('float32')
     test_X = test_X.astype('float32')
 
@@ -22,6 +56,7 @@ class cifar_test:
     test_Y = np_utils.to_categorical(test_Y)
 
     num_classes = test_Y.shape[1]
+    print(num_classes)
     model = Sequential()
     model.add(Conv2D(32, (3, 3), input_shape=(32, 32, 3),
                      padding='same', activation='relu',
@@ -55,4 +90,3 @@ class cifar_test:
         print(pred, ' \n')
         print(results[pred])
         check = input("Enter Y or N \n")
-
