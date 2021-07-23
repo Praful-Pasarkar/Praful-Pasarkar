@@ -14,39 +14,41 @@ from PIL import Image
 import numpy as np
 from sklearn.model_selection import train_test_split
 import cv2
+import image_dataset_loader
 
 class cifarpng:
-    DATA_DIR = "C:\\Keys\\cifar10\\train"
-    #DATA_DIR = "C:\\Keys\\idenprof\\train"
-    CATERGORIES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    #CATERGORIES = ['chef', 'doctor', 'engineer', 'farmer', 'firefighter', 'judge', 'mechanic', 'pilot', 'police', 'waiter']
-    IMAGE_SIZE = 32
-    training_data = []
-    for categories in CATERGORIES:
-        path = os.path.join(DATA_DIR, categories)
-        class_num = CATERGORIES.index(categories)
-        for img in os.listdir(path):
-            try:
-                img_array = cv2.imread(os.path.join(path, img))
-                new_array = cv2.resize(img_array, (IMAGE_SIZE, IMAGE_SIZE))
-                training_data.append([new_array, class_num])
-            except:
-                pass
-    data = np.asarray(training_data)
-    x_data = []
-    y_data = []
+    # DATA_DIR = "C:\\Keys\\cifar10\\test"
+    # #DATA_DIR = "C:\\Keys\\idenprof\\train"
+    # CATERGORIES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    # #CATERGORIES = ['chef', 'doctor', 'engineer', 'farmer', 'firefighter', 'judge', 'mechanic', 'pilot', 'police', 'waiter']
+    # IMAGE_SIZE = 32
+    # training_data = []
+    # for categories in CATERGORIES:
+    #     path = os.path.join(DATA_DIR, categories)
+    #     class_num = CATERGORIES.index(categories)
+    #     for img in os.listdir(path):
+    #         try:
+    #             img_array = cv2.imread(os.path.join(path, img))
+    #             new_array = cv2.resize(img_array, (IMAGE_SIZE, IMAGE_SIZE))
+    #             training_data.append([new_array, class_num])
+    #         except:
+    #             pass
+    # data = np.asarray(training_data)
+    # x_data = []
+    # y_data = []
+    #
+    # for x in data:
+    #     x_data.append(x[0])
+    #     y_data.append(x[1])
+    # x_data_np = np.asarray(x_data)
+    # y_data_np = np.asarray(y_data)
+    #
+    # x_data_np = x_data_np.reshape(-1, 32, 32, 1)
+    # print(x_data_np.shape)
+    # print(y_data_np.shape)
 
-    for x in data:
-        x_data.append(x[0])
-        y_data.append(x[1])
-    x_data_np = np.asarray(x_data)
-    y_data_np = np.asarray(y_data)
-
-    x_data_np = x_data_np.reshape(-1, 32, 32, 1)
-    print(x_data_np.shape)
-    print(y_data_np.shape)
-
-    (train_X, train_Y), (test_X, test_Y) = train_test_split(x_data_np, y_data_np, test_size=0.3, random_state=101)
+    #(train_X, train_Y), (test_X, test_Y) = train_test_split(x_data_np, y_data_np, test_size=0.3, random_state=101)
+    (train_X, train_Y), (test_X, test_Y) = image_dataset_loader.load('C:\\Keys\\cifar10', ['train', 'test'])
     train_x = train_X.astype('float32')
     test_X = test_X.astype('float32')
 
@@ -75,10 +77,10 @@ class cifarpng:
     model.summary()
     model.fit(train_X, train_Y,
               validation_data=(test_X, test_Y),
-              epochs=5, batch_size=32)
-    #model.save("model_cifar_try1_e5.h5")
+              epochs=10, batch_size=32)
+    model.save("model_cifar_final.h5")
 
-    results = ['aeroplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    results = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     check = 'y'
     while check == 'y' or check == 'Y':
         inp = input("Enter img path \n")
